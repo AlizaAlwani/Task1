@@ -1,0 +1,38 @@
+name: CI
+on: [push]
+
+jobs:
+  build:
+   
+    runs-on: ubuntu-latest
+    strategy:
+    matrix:
+        node: [16, 18]
+        collection: [Books.postman_collection.json, test.postman_environment.json ]
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+          with:
+            node-version: ${{matrix.node}}
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: install newman
+        run: npm install -g newman newman-reporter-html newman-reporter-htmlextra
+      
+      - name: run newman
+        run: newman run postman/Books.postman_collection.json -e postman/Books.postman_collection.json --reporters cli, html, htmlextra --reporter-htmlextra-export report.html
+        env:
+        POSTMAN_KEY_API: ${{secrets.POSTMAN_KEY_API}}
+
+      - name: upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report ${{matrix.collection}}
+          path: report.html
+
+
