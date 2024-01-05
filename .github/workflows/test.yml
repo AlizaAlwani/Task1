@@ -6,9 +6,9 @@ jobs:
    
     runs-on: ubuntu-latest
     strategy:
-    matrix:
-        node: [16, 18]
-        collection: [Books.postman_collection.json, test.postman_environment.json ]
+        matrix:
+            node: [16, 18]
+            collection: [Books.postman_collection.json, test.postman_environment.json ]
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
