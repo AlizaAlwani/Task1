@@ -18,8 +18,8 @@ jobs:
         with:
             node-version: ${{matrix.node}}
 
-      - name: install dependencies
-        run: npm ci
+    #   - name: install dependencies
+    #     run: npm ci
 
       - name: install newman
         run: npm install -g newman newman-reporter-html newman-reporter-htmlextra
